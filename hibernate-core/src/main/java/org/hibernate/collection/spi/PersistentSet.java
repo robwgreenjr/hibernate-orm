@@ -432,11 +432,6 @@ public class PersistentSet<E> extends AbstractPersistentCollection<E> implements
 	}
 
 	@Override
-	public boolean entryExists(Object key, int i) {
-		return key != null;
-	}
-
-	@Override
 	public boolean isWrapper(Object collection) {
 		return set==collection;
 	}

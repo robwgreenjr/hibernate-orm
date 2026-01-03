@@ -162,12 +162,15 @@ public class PersistentMap<K,E> extends AbstractPersistentCollection<E> implemen
 			}
 		}
 		initialize( true );
+		// When inserting a key, with a null value, we also need to
+		// confirm size change instead of new/old values
+		final int oldSize = map.size();
 		final E old = map.put( key, value );
 		// would be better to use the element-type to determine
 		// whether the old and the new are equal here; the problem being
 		// we do not necessarily have access to the element type in all
 		// cases
-		if ( value != old ) {
+		if ( value != old || oldSize != map.size() ) {
 			dirty();
 		}
 		return old;
@@ -443,7 +446,7 @@ public class PersistentMap<K,E> extends AbstractPersistentCollection<E> implemen
 		final List<Object> deletes = new ArrayList<>();
 		for ( var entry : ((Map<?,?>) getSnapshot()).entrySet() ) {
 			final Object key = entry.getKey();
-			if ( entry.getValue() != null && map.get( key ) == null ) {
+			if ( !map.containsKey( key ) ) {
 				deletes.add( indexIsFormula ? entry.getValue() : key );
 			}
 		}
@@ -453,7 +456,7 @@ public class PersistentMap<K,E> extends AbstractPersistentCollection<E> implemen
 	@Override
 	public boolean hasDeletes(CollectionPersister persister) {
 		for ( var entry : ((Map<?,?>) getSnapshot()).entrySet() ) {
-			if ( entry.getValue() != null && map.get( entry.getKey() ) == null ) {
+			if ( !map.containsKey( entry.getKey() ) ) {
 				return true;
 			}
 		}
@@ -464,7 +467,7 @@ public class PersistentMap<K,E> extends AbstractPersistentCollection<E> implemen
 	public boolean needsInserting(Object entry, int i, Type elemType) throws HibernateException {
 		final Map<?,?> sn = (Map<?,?>) getSnapshot();
 		final Entry<?,?> e = (Entry<?,?>) entry;
-		return e.getValue() != null && sn.get( e.getKey() ) == null;
+		return !sn.containsKey( e.getKey() );
 	}
 
 	@Override
@@ -472,9 +475,7 @@ public class PersistentMap<K,E> extends AbstractPersistentCollection<E> implemen
 		final Map<?,?> sn = (Map<?,?>) getSnapshot();
 		final Entry<?,?> e = (Entry<?,?>) entry;
 		final Object snValue = sn.get( e.getKey() );
-		return e.getValue() != null
-				&& snValue != null
-				&& elemType.isDirty( snValue, e.getValue(), getSession() );
+		return elemType.isDirty( snValue, e.getValue(), getSession() );
 	}
 
 	@Override
@@ -504,11 +505,6 @@ public class PersistentMap<K,E> extends AbstractPersistentCollection<E> implemen
 	public int hashCode() {
 		read();
 		return map.hashCode();
-	}
-
-	@Override
-	public boolean entryExists(Object entry, int i) {
-		return ( (Entry<?,?>) entry ).getValue() != null;
 	}
 
 	final class Clear implements DelayedOperation<E> {

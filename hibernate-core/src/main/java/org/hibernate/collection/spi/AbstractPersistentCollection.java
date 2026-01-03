@@ -90,6 +90,11 @@ public abstract class AbstractPersistentCollection<E> implements Serializable, P
 	}
 
 	@Override
+	public boolean entryExists(Object entry, int i) {
+		return entry != null;
+	}
+
+	@Override
 	public final @Nullable String getRole() {
 		return role;
 	}

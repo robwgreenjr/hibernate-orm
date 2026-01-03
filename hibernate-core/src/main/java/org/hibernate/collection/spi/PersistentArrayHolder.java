@@ -289,9 +289,4 @@ public class PersistentArrayHolder<E> extends AbstractPersistentCollection<E> {
 		final var snapshot = getSnapshot();
 		return get( snapshot, i );
 	}
-
-	@Override
-	public boolean entryExists(Object entry, int i) {
-		return entry != null;
-	}
 }

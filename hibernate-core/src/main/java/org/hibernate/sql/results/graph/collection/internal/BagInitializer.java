@@ -81,18 +81,15 @@ public class BagInitializer extends AbstractImmediateCollectionInitializer<Abstr
 			final Object collectionId = collectionIdAssembler.assemble( rowProcessingState );
 			if ( collectionId != null ) {
 				final Object element = elementAssembler.assemble( rowProcessingState );
-				if ( element != null ) {
-					loadingState.add( new Object[] {collectionId, element} );
-				}
-				// otherwise, if element is null, then NotFoundAction must be IGNORE
+				loadingState.add( new Object[] {collectionId, element} );
 			}
+			// otherwise, if collectionId is null, then NotFoundAction must be IGNORE
+			return;
 		}
-		else {
-			final Object element = elementAssembler.assemble( rowProcessingState );
-			if ( element != null ) {
-				// If element is null, then NotFoundAction must be IGNORE
-				loadingState.add( element );
-			}
+		final Object element = elementAssembler.assemble( rowProcessingState );
+		if ( element != null ) {
+			// If element is null, then NotFoundAction must be IGNORE
+			loadingState.add( element );
 		}
 	}
 

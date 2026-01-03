@@ -86,10 +86,7 @@ public class MapInitializer extends AbstractImmediateCollectionInitializer<Abstr
 		final Object key = mapKeyAssembler.assemble( rowProcessingState );
 		if ( key != null ) {
 			final Object value = mapValueAssembler.assemble( rowProcessingState );
-			if ( value != null ) {
-				loadingState.add( new Object[] {key, value} );
-			}
-			// else if the element is null, then NotFoundAction must be IGNORE
+			loadingState.add( new Object[] {key, value} );
 		}
 		// else if the key is null, then NotFoundAction must be IGNORE
 	}

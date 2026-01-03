@@ -628,11 +628,6 @@ public class PersistentBag<E> extends AbstractPersistentCollection<E> implements
 	}
 
 	@Override
-	public boolean entryExists(Object entry, int i) {
-		return entry != null;
-	}
-
-	@Override
 	public String toString() {
 		read();
 		return collection.toString();

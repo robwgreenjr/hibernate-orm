@@ -211,26 +211,22 @@ public class CollectionTest {
 		scope.inTransaction(
 				s -> {
 					User u2 = findUser( s );
-//					User u2 = (User) s.createCriteria( User.class ).uniqueResult();
 					assertFalse( Hibernate.isInitialized( u2.getSessionData() ) );
-					assertEquals( 1, u2.getSessionData().size() );
+					assertEquals( 2, u2.getSessionData().size() );
 					assertEquals( 2, u2.getEmailAddresses().size() );
 					u2.getSessionData().put( "foo", "new foo value" );
 					u2.getEmailAddresses().set( 1, new Email( "gavin@hibernate.org" ) );
-					//u2.getEmailAddresses().remove(3);
-					//u2.getEmailAddresses().remove(2);
 				}
 		);
 
 		scope.inTransaction(
 				s -> {
 					User u2 = findUser( s );
-//					User u2 = (User) s.createCriteria( User.class ).uniqueResult();
 					assertFalse( Hibernate.isInitialized( u2.getSessionData() ) );
-					assertEquals( 1, u2.getSessionData().size() );
+					assertEquals( 2, u2.getSessionData().size() );
 					assertEquals( 2, u2.getEmailAddresses().size() );
 					assertEquals( "new foo value", u2.getSessionData().get( "foo" ) );
-					assertEquals( "gavin@hibernate.org", ( (Email) u2.getEmailAddresses().get( 1 ) ).getAddress() );
+					assertEquals( "gavin@hibernate.org", ( u2.getEmailAddresses().get( 1 ) ).getAddress() );
 					s.remove( u2 );
 				}
 		);

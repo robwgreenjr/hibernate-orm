@@ -29,7 +29,7 @@
 			<element-collection name="sessionData">
 				<order-by>lower(`attr_name`) asc</order-by>
 				<map-key-column name="`attr_name`"/>
-				<column name="`attr_value`" nullable="false"/>
+				<column name="`attr_value`"/>
 				<collection-table name="user_session_datum">
 					<join-column name="user_fk"/>
 				</collection-table>

@@ -255,11 +255,6 @@ public class PersistentIdentifierBag<E> extends AbstractPersistentCollection<E> 
 	}
 
 	@Override
-	public boolean entryExists(Object entry, int i) {
-		return entry!=null;
-	}
-
-	@Override
 	public boolean equalsSnapshot(CollectionPersister persister) throws HibernateException {
 		final Type elementType = persister.getElementType();
 		final Map<?,?> snap = (Map<?,?>) getSnapshot();

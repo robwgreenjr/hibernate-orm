@@ -488,11 +488,6 @@ public class PersistentList<E> extends AbstractPersistentCollection<E> implement
 		return list.hashCode();
 	}
 
-	@Override
-	public boolean entryExists(Object entry, int i) {
-		return entry!=null;
-	}
-
 	final class Clear implements DelayedOperation<E> {
 		@Override
 		public void operate() {
